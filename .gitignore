@@ -1,4 +1,4 @@
-dirlister/.env
-dirlister/core/.main.db
-dirlister/core/.SECRET_KEY
-dirlister/core/.TG_CHAT_ID
+vebls/.env
+vebls/core/.main.db
+vebls/core/.SECRET_KEY
+vebls/core/.TG_CHAT_ID
