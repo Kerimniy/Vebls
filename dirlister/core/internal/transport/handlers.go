@@ -1,12 +1,14 @@
 package transport
 
 import (
+	"context"
 	"fmt"
 	"io"
 	"log"
 	"net/http"
 	"os"
 	"strconv"
+	"time"
 
 	"kerimniy.qzz.io/dirlister/internal/config"
 	"kerimniy.qzz.io/dirlister/internal/services"
@@ -28,7 +30,7 @@ func corsMiddleware(next http.Handler) http.Handler {
 	})
 }
 
-func ListenAndServeHTTP() {
+func ListenAndServeHTTP(ctx context.Context) {
 	mux := http.NewServeMux()
 
 	mux.HandleFunc("/s/{path...}", services.GetDirHandle)
@@ -59,23 +61,40 @@ func ListenAndServeHTTP() {
 
 	mux.HandleFunc("/", indexPage)
 
-	if os.Getenv("CERT") != "" && os.Getenv("KEY") != "" {
-		fmt.Println("Listening at: ", os.Getenv("HOST"), ", TLS enabled")
-
-		err := http.ListenAndServeTLS(os.Getenv("HOST"), os.Getenv("CERT"), os.Getenv("KEY"), corsMiddleware(mux))
-
-		if err != nil {
-			log.Fatal(0, err)
-		}
-	} else {
-		fmt.Println("Listening at: ", os.Getenv("HOST"), ", TLS disabled")
-
-		err := http.ListenAndServe(os.Getenv("HOST"), corsMiddleware(mux))
-
-		if err != nil {
-			log.Fatal(0, err)
-		}
+	srv := &http.Server{
+		Addr:    os.Getenv("HOST"),
+		Handler: corsMiddleware(mux),
 	}
+
+	go func() {
+		if os.Getenv("CERT") != "" && os.Getenv("KEY") != "" {
+			fmt.Println("Listening at: ", os.Getenv("HOST"), ", TLS enabled")
+
+			err := srv.ListenAndServeTLS(os.Getenv("CERT"), os.Getenv("KEY"))
+
+			if err != nil {
+				log.Fatal(0, err)
+			}
+		} else {
+			fmt.Println("Listening at: ", os.Getenv("HOST"), ", TLS disabled")
+
+			err := srv.ListenAndServe()
+
+			if err != nil {
+				log.Fatal(0, err)
+			}
+		}
+	}()
+
+	<-ctx.Done()
+
+	shutdownCtx, cancel := context.WithTimeout(
+		context.Background(),
+		5*time.Second,
+	)
+	defer cancel()
+	fmt.Println("Shutting down...")
+	srv.Shutdown(shutdownCtx)
 }
 
 func getUploadLimit(w http.ResponseWriter, r *http.Request) {

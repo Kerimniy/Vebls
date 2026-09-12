@@ -114,32 +114,34 @@ function App() {
     })
   }, [])
 
-  return (<div className="flex h-screen w-full">
-    <ThemeProvider attribute="class"
-      defaultTheme="system"
-      enableSystem>
+  return (
+    <div className="flex h-screen w-full">
+      <ThemeProvider attribute="class"
+        defaultTheme="system"
+        enableSystem>
 
 
-      <AuthProvider>
+        <AuthProvider>
 
-        <Routes>
-          <Route path='/.@/edit' element={<EditPage />}></Route>
-          <Route path='/.@/create' element={<EditPage />}></Route>
-          <Route path='/.@/upload' element={<FileUpload />}></Route>
-          <Route path='/.@/rules' element={<RulesPage />}></Route>
-          <Route path="/.@/auth/*" element={<Auth />}></Route>
-          <Route path="/.@/account" element={<AccountPage />}></Route>
-          <Route path='/*' element={<IndexPage />}></Route>
-
-
-        </Routes>
+          <Routes>
+            <Route path='/.@/edit' element={<EditPage />}></Route>
+            <Route path='/.@/create' element={<EditPage />}></Route>
+            <Route path='/.@/upload' element={<FileUpload />}></Route>
+            <Route path='/.@/rules' element={<RulesPage />}></Route>
+            <Route path="/.@/auth/*" element={<Auth />}></Route>
+            <Route path="/.@/account" element={<AccountPage />}></Route>
+            <Route path='/*' element={<IndexPage />}></Route>
 
 
+          </Routes>
 
-      </AuthProvider>
 
 
-    </ThemeProvider>        </div>
+        </AuthProvider>
+
+
+      </ThemeProvider>
+    </div>
 
   )
 }

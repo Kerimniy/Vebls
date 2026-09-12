@@ -1,7 +1,10 @@
 package main
 
 import (
+	"context"
 	"fmt"
+	"os"
+	"os/signal"
 	"time"
 
 	"kerimniy.qzz.io/dirlister/internal/config"
@@ -15,6 +18,12 @@ func main() {
 
 	fmt.Println(time.Now(), "Starting... ")
 
+	ctx, stop := signal.NotifyContext(
+		context.Background(),
+		os.Interrupt,
+	)
+	defer stop()
+
 	config.InitConf()
 	fmt.Println(time.Now(), "Initialized config ")
 
@@ -24,7 +33,7 @@ func main() {
 	db.InitDb()
 	fmt.Println(time.Now(), "Initialized database ")
 
-	tgbot.InitTGBot()
+	tgbot.InitTGBot(ctx)
 	fmt.Println(time.Now(), "Initialized tg bot service ")
 
 	services.InitSearch()
@@ -33,5 +42,5 @@ func main() {
 	config.Admin = services.Admin_exist()
 	fmt.Println(time.Now(), "Initialized admin status")
 
-	transport.ListenAndServeHTTP()
+	transport.ListenAndServeHTTP(ctx)
 }

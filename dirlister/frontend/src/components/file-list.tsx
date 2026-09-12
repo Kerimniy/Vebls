@@ -104,7 +104,7 @@ export function FileList({ files, page, onEdit, onDelete, onRename, checkAll, se
       </div>)
   }
 
-  if ((files === undefined || files.length === 0) && fetchStatus !== 204) {
+  if ((files === undefined || files === null || files.length === 0) && fetchStatus !== 204) {
     return (
       <div className="flex flex-col items-center justify-center py-20 text-center">
         <div className="rounded-full bg-muted p-4">

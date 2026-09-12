@@ -71,6 +71,6 @@ export const authService = {
   changePassword: (data: ChangePasswordData) => sendRequest(`${BACKEND_BASE_URL}/auth/change`, data),
   resetPassword: (data: ResetPasswordData) => sendRequest(`${BACKEND_BASE_URL}/auth/reset`, data),
   deleteAccount: () => { fetch(`${BACKEND_BASE_URL}/auth/delete`) },
-  sendCode: async (data: string) => { return await sendRequest(`${BACKEND_BASE_URL}/auth/code`, {email:data}) },
+  sendCode: async () => { return fetch(`${BACKEND_BASE_URL}/auth/code`) },
   logout: (on_finish: () => void) => { logout(on_finish) },
 };

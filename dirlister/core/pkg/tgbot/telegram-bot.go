@@ -8,7 +8,7 @@ import (
 	"io"
 	"log"
 	"os"
-	"os/signal"
+	"time"
 
 	"github.com/go-telegram/bot"
 	"github.com/go-telegram/bot/models"
@@ -19,28 +19,33 @@ type AdminStructTG struct {
 	UserName string `json:"username"`
 }
 
+type Code struct {
+	c   string
+	exp time.Time
+}
+
+var sendedCode = Code{}
+
 var AdminTG AdminStructTG = AdminStructTG{ChatID: -1}
 var b *bot.Bot
-var ctx context.Context
 
-func InitTGBot() {
+func InitTGBot(ctx context.Context) {
 
 	InitChatID()
-
-	ctx, cancel := signal.NotifyContext(context.Background(), os.Interrupt)
-	defer cancel()
 
 	opts := []bot.Option{
 		bot.WithDefaultHandler(handler),
 	}
-
-	b, err := bot.New(os.Getenv("TELEGRAM_BOT_TOKEN"), opts...)
+	var err error
+	b, err = bot.New(os.Getenv("TELEGRAM_BOT_TOKEN"), opts...)
 	if nil != err {
 
 		panic(err)
 	}
 
-	b.Start(ctx)
+	go func() {
+		b.Start(ctx)
+	}()
 
 }
 
@@ -90,7 +95,9 @@ func InitChatID() {
 
 }
 
-func SendCode(code string) error {
+func SendCode(code string, exp time.Time) error {
+
+	sendedCode = Code{c: code, exp: exp}
 
 	kb := &models.ReplyKeyboardMarkup{
 		Keyboard: [][]models.KeyboardButton{
@@ -104,9 +111,9 @@ func SendCode(code string) error {
 		OneTimeKeyboard: false,
 	}
 
-	_, err := b.SendMessage(ctx, &bot.SendMessageParams{
+	_, err := b.SendMessage(context.Background(), &bot.SendMessageParams{
 		ChatID:      AdminTG.ChatID,
-		Text:        code,
+		Text:        fmt.Sprintf("Your code: %s", code),
 		ReplyMarkup: kb,
 	})
 
@@ -142,9 +149,16 @@ func handler(ctx context.Context, b *bot.Bot, update *models.Update) {
 				ReplyMarkup: kb,
 			})
 		} else if AdminTG.ChatID == update.Message.Chat.ID && AdminTG.UserName == update.Message.Chat.Username {
+
+			msg := "No code for now"
+
+			if time.Now().Before(sendedCode.exp) {
+				msg = fmt.Sprintf("Your code: %s", sendedCode.c)
+			}
+
 			b.SendMessage(ctx, &bot.SendMessageParams{
 				ChatID:      update.Message.Chat.ID,
-				Text:        "No code for now",
+				Text:        msg,
 				ReplyMarkup: kb,
 			})
 		}

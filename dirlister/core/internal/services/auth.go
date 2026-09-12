@@ -102,7 +102,7 @@ func Register(w http.ResponseWriter, r *http.Request) {
 	}
 
 	fmt.Println(payload.Code)
-	if !validateCode(payload.Email, payload.Code) {
+	if !validateCode(payload.Code) {
 		w.WriteHeader(400)
 
 		return
@@ -156,7 +156,7 @@ func ResetPassword(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if !validateCode(payload.Email, payload.Code) {
+	if !validateCode(payload.Code) {
 		w.WriteHeader(400)
 		return
 	}

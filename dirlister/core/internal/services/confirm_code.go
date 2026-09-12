@@ -14,13 +14,13 @@ import (
 	"kerimniy.qzz.io/dirlister/internal/models"
 )
 
-type AuthCode struct {
+type AuthCodeStruct struct {
 	mu      sync.RWMutex
 	code    string
 	expires time.Time
 }
 
-var authCode = AuthCode{}
+var AuthCode = AuthCodeStruct{}
 
 func Admin_exist() config.AdminStruct {
 	var user models.User
@@ -34,7 +34,7 @@ func Admin_exist() config.AdminStruct {
 	return config.AdminStruct{Email: user.Email, Exist: true}
 }
 
-func (a *AuthCode) Set(code string, ttl time.Duration) {
+func (a *AuthCodeStruct) Set(code string, ttl time.Duration) {
 	a.mu.Lock()
 	defer a.mu.Unlock()
 
@@ -42,14 +42,14 @@ func (a *AuthCode) Set(code string, ttl time.Duration) {
 	a.expires = time.Now().Add(ttl)
 }
 
-func (a *AuthCode) Check(code string) bool {
+func (a *AuthCodeStruct) Check(code string) bool {
 	a.mu.RLock()
 	defer a.mu.RUnlock()
 
 	return a.code == code && time.Now().Before(a.expires)
 }
 
-func (a *AuthCode) Clear() {
+func (a *AuthCodeStruct) Clear() {
 	a.mu.Lock()
 	defer a.mu.Unlock()
 

@@ -113,8 +113,8 @@ export default function Auth() {
         setIsLoading(true);
         setStatusMessage(null);
         try {
-            let res = await authService.sendCode(email)
-            
+            let res = await authService.sendCode()
+            console.log(res.ok)
             if (!res.ok){
                 throw new Error(res.statusText)
             }
@@ -145,7 +145,7 @@ export default function Auth() {
                 <Route path="/sign-up/" element={
                     <Card className="p-6 pt-0 w-full max-w-sm bg-glass">
                         <div className="flex flex-row justify-between p-4 pt-6 pb-2">
-                            <p className="text-lg font-semibold">Reset password</p>
+                            <p className="text-lg font-semibold">Sign up</p>
                             <Link className="text-base text-primary hover:underline" to="/.@/auth/login/">back to log in</Link>
                         </div>
                         <form onSubmit={registerSubmit} className="p-4 flex flex-col gap-4">
@@ -172,7 +172,7 @@ export default function Auth() {
                             </Button>
 
                             <Input
-                                placeholder="Email code"
+                                placeholder="Enter code"
                                 type="text"
                                 maxLength={6}
                                 value={code}
@@ -253,7 +253,7 @@ export default function Auth() {
                             </Button>
 
                             <Input
-                                placeholder="Email code"
+                                placeholder="Enter code"
                                 type="text"
                                 maxLength={6}
                                 value={code}

@@ -466,7 +466,7 @@ func indexNewDirs(path string, fileSize int64, delete bool) error {
 			})
 		}
 
-		if f {
+		if !f {
 			f = true
 		}
 

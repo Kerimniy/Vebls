@@ -25,9 +25,9 @@ export default function FileUpload() {
     const fileLimit = 10
     let maxSize = 0
 
-    fetch(`${BACKEND_BASE_URL}/info/upload-limit`).then(r=>{
-       return r.text()
-    }).then(t=>{maxSize=Number(t)})
+    fetch(`${BACKEND_BASE_URL}/info/upload-limit`).then(r => {
+        return r.text()
+    }).then(t => { maxSize = Number(t) })
 
     const [searchParams, setSearchParams] = useSearchParams()
     const [statusMessage, setStatusMessage] = useState<{ text: string; isError: boolean } | null>(null);
@@ -135,9 +135,9 @@ export default function FileUpload() {
                 credentials: "include"
             });
 
-            if (!response.ok) { setStatusMessage({ text: `Error status code: ${response.status}`, isError: true }); throw new Error("Save failed")};
+            if (!response.ok) { setStatusMessage({ text: `Error status code: ${response.status}`, isError: true }); throw new Error("Save failed") };
 
-            setStatusMessage({text:"Successfuly saved", isError: false})
+            setStatusMessage({ text: "Successfuly saved", isError: false })
             console.log("Saved");
 
             setFiles([]);
@@ -154,15 +154,18 @@ export default function FileUpload() {
             <SidebarInset className="min-w-0">
                 <AppHeader
                     onProfileClick={() => navigate("/.@/account")}
+                    hideSearch={true}
                 />
-                {statusMessage && (
-                    <div className={`p-3 rounded-md text-sm font-medium border max-w-sm w-full text-center ${statusMessage.isError
-                        ? 'bg-destructive/10 text-destructive border-destructive/20'
-                        : 'bg-green-500/10 text-green-600 border-green-500/20'
-                        }`}>
-                        {statusMessage.text}
-                    </div>
-                )}
+                <div className="w-full flex flex-col items-center p-4">
+                    {(statusMessage) && (
+                        <div className={`items-center p-3 rounded-md text-sm font-medium border max-w-sm w-full text-center ${statusMessage.isError
+                            ? 'bg-destructive/10 text-destructive border-destructive/20'
+                            : 'bg-green-500/10 text-green-600 border-green-500/20'
+                            }`}>
+                            {statusMessage.text}
+                        </div>
+                    )}
+                </div>
 
                 <div className="p-6">
                     <Card className="mt-6">
@@ -206,7 +209,7 @@ export default function FileUpload() {
                                     <Upload className="w-6 h-6" />
                                 </div>
                                 <p className="text-sm font-medium text-foreground">
-                                    {isDragging ? "Отпустите файлы для загрузки" : "Перетащите файлы или нажмите для выбора"}
+                                    {isDragging ? "Drop files to upload" : "Drag and drop files or click to select"}
                                 </p>
                                 <p className="text-xs text-muted-foreground mt-1">
                                     Max 10 files, 1GB limit

@@ -15,6 +15,10 @@ import (
 	"kerimniy.qzz.io/dirlister/internal/models"
 )
 
+func TrimSlash(s string) string {
+
+	return strings.Trim(strings.TrimLeft(s, "/"), "/")
+}
 
 func CreateRule(w http.ResponseWriter, r *http.Request) {
 
@@ -23,10 +27,12 @@ func CreateRule(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	path := r.URL.Query().Get("p")
-	if strings.Trim(getSignedCookie(r, w), " ") == "" {
+	if !checkAdmin(w, r) {
 		w.WriteHeader(403)
 		return
 	}
+
+	path = TrimSlash(path)
 
 	_time := time.Now()
 

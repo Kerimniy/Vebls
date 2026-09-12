@@ -29,7 +29,7 @@ func listDir(dir string, urlPath string, user string, page int) ([]models.EntryI
 			continue
 		}
 
-		_, _, match := config.RulesTree.Tree.LongestPrefix(entry.Dir)
+		_, _, match := config.RulesTree.Tree.LongestPrefix(TrimSlash(entry.Name))
 
 		if match == true && user == "" {
 			continue
