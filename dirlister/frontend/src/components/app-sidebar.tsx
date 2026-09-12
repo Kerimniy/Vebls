@@ -34,6 +34,8 @@ import { useEffect, useState } from "react";
 
 import { formatFileSize } from "@/lib/files";
 
+import VeblsIcon from '@/assets/vebls.svg?react'
+
 const mainItems = [
   { title: "Home", icon: Home, link: "/" , adminOnly: false},
   { title: "Route Rules", icon: Signpost, link: "/.@/rules", adminOnly: true },
@@ -71,9 +73,9 @@ export function AppSidebar() {
           <SidebarGroupContent>
             <div className="flex flex-row">
               <div className="flex flex-col justify-center items-center ">
-                <XIcon className="w-[2.5rem] h-[2.5rem]"></XIcon>
+                <VeblsIcon className="h-[2rem] w-[2rem]"></VeblsIcon>
               </div>
-              <div className="text-3xl font-semibold">Vebls</div>
+              <div className="text-3xl font-bold">Vebls</div>
             </div>
           </SidebarGroupContent>
         </SidebarGroup>

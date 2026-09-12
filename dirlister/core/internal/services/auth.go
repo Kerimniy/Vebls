@@ -16,13 +16,11 @@ import (
 
 func checkAdmin(w http.ResponseWriter, r *http.Request) bool {
 
-	fmt.Println(getSignedCookie(r, w), config.Admin.Email)
 	return getSignedCookie(r, w) == config.Admin.Email
 }
 
 func GetUser(w http.ResponseWriter, r *http.Request) {
 
-	fmt.Println("77", getSignedCookie(r, w))
 
 	if r.Header.Get("Origin") != os.Getenv("FRONTEND") {
 		w.WriteHeader(403)
@@ -39,7 +37,6 @@ func GetUser(w http.ResponseWriter, r *http.Request) {
 	}
 
 	email := getSignedCookie(r, w)
-	fmt.Println("11", email)
 	user := models.User{}
 	err := db.Db.Where("email= ?", email).First(&user).Error
 
@@ -101,7 +98,6 @@ func Register(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	fmt.Println(payload.Code)
 	if !validateCode(payload.Code) {
 		w.WriteHeader(400)
 
