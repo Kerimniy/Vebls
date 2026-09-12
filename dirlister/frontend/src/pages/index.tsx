@@ -285,11 +285,13 @@ export default function IndexPage() {
               <h1 className="text-2xl font-bold tracking-tight">Files</h1>
 
             </div>
-            <Button>
-              <Link className="flex-row flex justify-center items-center" to="/.@/create">
-                <Plus className="mr-2 h-4 w-4" />
-                New File</Link>
-            </Button>
+            {(user !== null && user !== undefined) &&
+              <Button>
+                <Link className="flex-row flex justify-center items-center" to="/.@/create">
+                  <Plus className="mr-2 h-4 w-4" />
+                  New File</Link>
+              </Button>
+            }
 
           </div>
 

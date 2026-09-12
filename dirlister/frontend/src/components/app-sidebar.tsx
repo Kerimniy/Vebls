@@ -29,17 +29,17 @@ import {
 import { Link } from "react-router";
 
 import { Progress } from "@/components/ui/progress"
-import { BACKEND_BASE_URL } from "@/App";
+import { BACKEND_BASE_URL, useAuth } from "@/App";
 import { useEffect, useState } from "react";
 
 import { formatFileSize } from "@/lib/files";
 
 const mainItems = [
-  { title: "Home", icon: Home, link: "/" },
-  { title: "Route Rules", icon: Signpost, link: "/.@/rules" },
-  { title: "Create", icon: Plus, link: "/.@/create" },
+  { title: "Home", icon: Home, link: "/" , adminOnly: false},
+  { title: "Route Rules", icon: Signpost, link: "/.@/rules", adminOnly: true },
+  { title: "Create", icon: Plus, link: "/.@/create", adminOnly: true },
 
-  { title: "Account", icon: UserRound, link: "/.@/account" },
+  { title: "Account", icon: UserRound, link: "/.@/account", adminOnly: false },
 ];
 
 interface Usage {
@@ -52,6 +52,9 @@ export function AppSidebar() {
 
   const [usage, setUsage] = useState<Usage>(null)
 
+  const {user} = useAuth()
+
+
   useEffect(()=>{
     fetch(`${BACKEND_BASE_URL}/info/disk-usage`, { credentials: "include" }).then(r => r.json()).then(res => {
       let newUsage: Usage = { percent: res.percent, free: res.free, base: res.base }
@@ -62,33 +65,36 @@ export function AppSidebar() {
 
   return (
     <Sidebar variant="inset">
-      <SidebarContent>
+      <SidebarContent className="pl-2 pt-3">
 
         <SidebarGroup>
           <SidebarGroupContent>
             <div className="flex flex-row">
               <div className="flex flex-col justify-center items-center ">
-                <XIcon className="w-[2rem] h-[2rem]"></XIcon>
+                <XIcon className="w-[2.5rem] h-[2.5rem]"></XIcon>
               </div>
-              <div className="text-2xl font-semibold">Dirlist</div>
+              <div className="text-3xl font-semibold">Vebls</div>
             </div>
           </SidebarGroupContent>
         </SidebarGroup>
 
         <SidebarGroup>
-          <SidebarGroupLabel>Navigation</SidebarGroupLabel>
+          <SidebarGroupLabel className="text-lg mb-2">Navigation</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
-              {mainItems.map((item) => (
-                <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton >
-                    <Link to={item.link} className="flex flex-row gap-4">
-                      <item.icon className="h-4 w-4" />
-                      <span>{item.title}</span>
-                    </Link>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              ))}
+              {mainItems.map((item) =>{ if (item.adminOnly==false || (user!==null && user!==undefined)){
+                return (
+
+                  <SidebarMenuItem key={item.title}>
+                    <SidebarMenuButton >
+                      <Link to={item.link} className="pl-1 flex flex-row gap-4 items-center">
+                        <item.icon className="h-4 w-4" />
+                        <span className="text-base">{item.title}</span>
+                      </Link>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                )
+              } })}
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>

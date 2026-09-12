@@ -1,6 +1,6 @@
 "use client";
 
-import { LogIn, Search, Upload, User } from "lucide-react";
+import { LogIn, Search, SunMoon, Upload, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Input } from "@/components/ui/input";
@@ -9,6 +9,18 @@ import { Link, useLocation } from "react-router";
 import { useEffect, useState } from "react";
 
 import { type FileItem } from "@/lib/files";
+import { useAuth } from "@/App";
+
+
+import { Moon, Sun } from "lucide-react"
+import { useTheme } from "next-themes"
+
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
 
 
 interface AppHeaderProps {
@@ -25,6 +37,7 @@ export function AppHeader({ onProfileClick, hideSearch, onSearch, searchQuery, s
   const location = useLocation();
 
   const [dir, setDir] = useState("/")
+  const { user } = useAuth()
 
   useEffect(() => {
 
@@ -56,14 +69,23 @@ export function AppHeader({ onProfileClick, hideSearch, onSearch, searchQuery, s
       </>
       }
       <div className="ml-auto flex items-center gap-2">
-        <Link to={`/.@/upload?dir=${dir}`}>
-          <Button variant="outline" size="sm" className="hidden sm:flex">
-            <Upload className="mr-2 h-4 w-4" />
-            Upload
-          </Button>
-        </Link>
+
+        {(user !== null && user !== undefined) &&
+
+          <Link to={`/.@/upload?dir=${dir}`}>
+            <Button variant="outline" size="sm" className="hidden sm:flex">
+              <Upload className="mr-2 h-4 w-4" />
+              Upload
+            </Button>
+          </Link>
+
+        }
+
+
+<ModeToggle></ModeToggle>
+
         <Button
-          variant="ghost"
+          variant="outline"
           size="icon"
           onClick={onProfileClick}
           className="rounded-full"
@@ -75,4 +97,37 @@ export function AppHeader({ onProfileClick, hideSearch, onSearch, searchQuery, s
       </div>
     </header>
   );
+
+
+}
+
+
+export function ModeToggle() {
+  const { setTheme } = useTheme()
+
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger>
+        <Button className={"rounded-full"} variant="outline" size="icon">
+          <Sun className="h-[1.2rem] w-[1.2rem] scale-100 rotate-0 transition-all dark:scale-0 dark:-rotate-90" />
+          <Moon className="absolute h-[1.2rem] w-[1.2rem] scale-0 rotate-90 transition-all dark:scale-100 dark:rotate-0" />
+          <span className="sr-only">Toggle theme</span>
+        </Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="end">
+        <DropdownMenuItem className={"flex flex-row"} onClick={() => setTheme("light")}>
+          <Sun />
+          Light
+        </DropdownMenuItem>
+        <DropdownMenuItem className={"flex flex-row"} onClick={() => setTheme("dark")}>
+          <Moon />
+          Dark
+        </DropdownMenuItem>
+        <DropdownMenuItem className={"flex flex-row"} onClick={() => setTheme("system")}>
+          <SunMoon />
+          System
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
+  )
 }
