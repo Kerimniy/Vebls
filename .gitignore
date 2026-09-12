@@ -1,3 +1,4 @@
 dirlister/.env
 dirlister/core/.main.db
 dirlister/core/.SECRET_KEY
+dirlister/core/.TG_CHAT_ID
