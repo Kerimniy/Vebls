@@ -2,5 +2,5 @@ vebls/.env
 vebls/core/.main.db
 vebls/core/.SECRET_KEY
 vebls/core/.TG_CHAT_ID
-vebis/node_modules/
-vebis/frontend/node_modules/
+vebls/node_modules/
+vebls/frontend/node_modules/
