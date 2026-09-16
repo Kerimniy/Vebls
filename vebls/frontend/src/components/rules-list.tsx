@@ -241,7 +241,7 @@ export function RulesList({ rules, page, onDelete, onChange, checkAll, setCheckA
 }
 
 
-function checkAllFunc(e, rules: Rule[], setChecked: React.Dispatch<React.SetStateAction<Set<string>>>) {
+function checkAllFunc(e: boolean, rules: Rule[], setChecked: React.Dispatch<React.SetStateAction<Set<string>>>) {
 
     let newSet = new Set<string>()
 

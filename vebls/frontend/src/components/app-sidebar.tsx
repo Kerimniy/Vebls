@@ -52,7 +52,7 @@ interface Usage {
 
 export function AppSidebar() {
 
-  const [usage, setUsage] = useState<Usage>(null)
+  const [usage, setUsage] = useState<Usage | null>(null)
 
   const {user} = useAuth()
 

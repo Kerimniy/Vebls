@@ -320,7 +320,7 @@ export function FileList({ files, page, onEdit, onDelete, onRename, checkAll, se
 }
 
 
-function checkAllFunc(e, files: FileItem[], setChecked: React.Dispatch<React.SetStateAction<Set<string>>>) {
+function checkAllFunc(e: boolean, files: FileItem[], setChecked: React.Dispatch<React.SetStateAction<Set<string>>>) {
 
   let newSet = new Set<string>()
 

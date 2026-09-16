@@ -55,13 +55,13 @@ export function AppHeader({ onProfileClick, hideSearch, onSearch, searchQuery, s
       <SidebarTrigger className="-ml-1" />
 
       {!hideSearch && <>
-        <form onSubmit={(e) => { e.preventDefault(); onSearch() }} className="relative flex-1 max-w-md">
+        <form onSubmit={(e) => { e.preventDefault(); onSearch?.() }} className="relative flex-1 max-w-md">
           <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
           <Input
             value={searchQuery}
             placeholder="Search..."
             className="pl-9"
-            onInput={(e) => { setSearchQuery(e.currentTarget.value) }}
+            onInput={(e) => { setSearchQuery?.(e.currentTarget.value) }}
           />
         </form>
 

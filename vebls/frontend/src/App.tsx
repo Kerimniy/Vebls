@@ -25,7 +25,7 @@ export const AuthContext = createContext<{
   updateUser: () => Promise<void>;
 } | null>(null);
 
-export const BACKEND_BASE_URL = "https://127.0.0.1:6060"
+export const BACKEND_BASE_URL = "https://api.vebls.kerimniy.qzz.io"
 export let RESULTS_PER_PAGE = Number(localStorage.getItem("___results_per_page"))
 export let SEARCH_RESULTS_PER_PAGE = Number(localStorage.getItem("___search_results_per_page"))
 

@@ -105,12 +105,14 @@ export async function searchFiles(query: string, page: number, dim: string, setS
 
     if (!response.ok) {
       console.log(response.status)
-      return null
+      let f: FileItem[]=[]
+      return f
     }
   }
   catch (err) {
     console.log(err)
-    return null
+    let f: FileItem[] = []
+    return f
   }
   const result = await response.json();
 
@@ -119,7 +121,7 @@ export async function searchFiles(query: string, page: number, dim: string, setS
 
     for (let el of result) {
 
-      files.push({ name: el.name, type: el.type, size: el.size, mimeType: mime.getType(el.name), modifiedAt: formatDate(el.modTime), fullName: el.fullName })
+      files.push({ name: el.name, type: el.type, size: el.size, mimeType: String(mime.getType(el.name)), modifiedAt: formatDate(el.modTime), fullName: el.fullName })
 
     }
   
@@ -146,12 +148,14 @@ export async function getFiles(folder: string, dim: string,page:Number, setStatu
 
     if (!response.ok) {
       console.log(response.status)
-      return null
+      let f: FileItem[] = []
+      return f
     }
   }
   catch (err) {
     console.log(err)
-    return null
+    let f: FileItem[] = []
+    return f
   }
   const result = await response.json();
 
@@ -159,7 +163,7 @@ export async function getFiles(folder: string, dim: string,page:Number, setStatu
   let files: FileItem[] = []
   for (let el of result) {
 
-    files.push({ name: el.name, type: el.type, size: el.size, mimeType: mime.getType(el.name), modifiedAt: formatDate(el.modTime), fullName: el.fullName })
+    files.push({ name: el.name, type: el.type, size: el.size, mimeType: String(mime.getType(el.name)), modifiedAt: formatDate(el.modTime), fullName: el.fullName })
 
   }
 

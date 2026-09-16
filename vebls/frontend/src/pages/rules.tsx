@@ -69,8 +69,8 @@ export default function RulesPage() {
     const [newRulePath, setNewRulePath] = useState("")
 
 
-    const leftArrowPageButton = useRef(null)
-    const rightArrowPageButton = useRef(null)
+    const leftArrowPageButton = useRef<HTMLButtonElement>(null)
+    const rightArrowPageButton = useRef<HTMLButtonElement>(null)
 
     const location = useLocation()
     const [sortBy, setSortBy] = useState(localStorage.getItem("sortRulesBy") || "Alphabet")
@@ -215,7 +215,7 @@ export default function RulesPage() {
 
                     <div className="mb-3 flex flex-row justify-between">
 
-                        <Select value={sortBy} onValueChange={(e) => { localStorage.setItem("sortRulesBy", e); setRules(sortRulesBy(rules, e)); setSortBy(e) }}>
+                        <Select value={sortBy} onValueChange={(e) => { localStorage.setItem("sortRulesBy", String(e)); setRules(sortRulesBy(rules, String(e))); setSortBy(String(e)) }}>
                             <SelectTrigger className="w-[240px]">
                                 <SelectValue placeholder="Theme" />
                             </SelectTrigger>
@@ -275,11 +275,11 @@ export default function RulesPage() {
                     </div>
                     {(rules !== null && rules !== undefined) &&
                         <Card className="flex-row justify-center mt-4">
-                            <Button disabled={page === 0} ref={leftArrowPageButton} variant="outline" onClick={() => { if (page > 0) { rightArrowPageButton.current.disabled = false; setPage(page - 1); if (page - 1 === 0) { leftArrowPageButton.current.disabled = true } } }}><ChevronLeft /></Button>
+                            <Button disabled={page === 0} ref={leftArrowPageButton} variant="outline" onClick={() => { if (page > 0) { rightArrowPageButton.current!.disabled = false; setPage(page - 1); if (page - 1 === 0) { leftArrowPageButton.current!.disabled = true } } }}><ChevronLeft /></Button>
 
                             <Input min={0}  style={{ width: `${String(page).length + 6}ch` }} type="number" value={page} onInput={(e) => { setPage(Number(e.currentTarget.value)) }}></Input>
 
-                            <Button ref={rightArrowPageButton} variant="outline" onClick={() => {  leftArrowPageButton.current.disabled = false; setPage(page + 1);  } }><ChevronRight /></Button>
+                            <Button ref={rightArrowPageButton} variant="outline" onClick={() => {  leftArrowPageButton.current!.disabled = false; setPage(page + 1);  } }><ChevronRight /></Button>
 
                         </Card>
                     }
@@ -296,13 +296,15 @@ export async function getRules(page: Number, dim: string): Promise<Rule[]> {
         response = await fetch(url, {credentials: "include"});
         if (!response.ok) {
             console.log(response.status)
-            return null
+            let r: Rule[] = []
+            return r
         }
         
     }
     catch (err) {
         console.log(err)
-        return null
+        let r: Rule[] = []
+        return r
     }
     const result = await response.json();
 

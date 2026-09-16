@@ -96,8 +96,8 @@ export default function IndexPage() {
 
   const [fetchStatus, setFetchStatus] = useState(0)
 
-  const leftArrowPageButton = useRef(null)
-  const rightArrowPageButton = useRef(null)
+  const leftArrowPageButton = useRef<HTMLButtonElement>(null)
+  const rightArrowPageButton = useRef<HTMLButtonElement>(null)
 
   const location = useLocation()
 
@@ -126,7 +126,7 @@ export default function IndexPage() {
     let isMounted = true;
 
     if (location.pathname === "/.@/search") {
-      setSearchQuery(searchParams.get("q"))
+      setSearchQuery(String(searchParams.get("q")))
       handleSearch()
       return
     }
@@ -297,7 +297,7 @@ export default function IndexPage() {
 
           <div className="mb-3 flex flex-row justify-between">
 
-            <Select value={sortBy} onValueChange={(e) => { localStorage.setItem("sortBy", e); setFiles(sortFilesBy(files, e)); setSortBy(e) }}>
+            <Select value={sortBy} onValueChange={(_e) => { let e = String(_e); localStorage.setItem("sortBy", e); setFiles(sortFilesBy(files, e)); setSortBy(e) }}>
               <SelectTrigger className="w-[240px]">
                 <SelectValue placeholder="Theme" />
               </SelectTrigger>
@@ -377,11 +377,11 @@ export default function IndexPage() {
 
           {(files !== null && files !== undefined) &&
             <Card className="flex-row justify-center mt-4">
-              <Button disabled={page === 0} ref={leftArrowPageButton} variant="outline" onClick={() => { if (page > 0) { rightArrowPageButton.current.disabled = false; setPage(page - 1); if (page - 1 === 0) { leftArrowPageButton.current.disabled = true } } }}><ChevronLeft /></Button>
+              <Button disabled={page === 0} ref={leftArrowPageButton} variant="outline" onClick={() => { if (page > 0) { setPage(page - 1); if (page - 1 === 0 && leftArrowPageButton.current !== null && leftArrowPageButton.current !== undefined) { leftArrowPageButton.current.disabled = true } } }}><ChevronLeft /></Button>
 
               <Input min={0} style={{ width: `${String(page).length + 6}ch` }} type="number" value={page} onInput={(e) => { setPage(Number(e.currentTarget.value)) }}></Input>
 
-              <Button ref={rightArrowPageButton} variant="outline" onClick={() => { leftArrowPageButton.current.disabled = false; setPage(page + 1); }}><ChevronRight /></Button>
+              <Button ref={rightArrowPageButton} variant="outline" onClick={() => { leftArrowPageButton.current!.disabled = false; setPage(page + 1); }}><ChevronRight /></Button>
 
             </Card>
           }

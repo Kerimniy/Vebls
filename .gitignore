@@ -4,3 +4,4 @@ vebls/core/.SECRET_KEY
 vebls/core/.TG_CHAT_ID
 vebls/node_modules/
 vebls/frontend/node_modules/
+vebls/frontend/dist/
